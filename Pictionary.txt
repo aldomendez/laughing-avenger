@@ -1,0 +1,7 @@
+# Pictionary
+La idea es tener todo el juego del pictionary en un archivo de texto
+* Que se pueda jugar en el firefox OS
+* Que las tarjetas aparezcan a pantalla completa en los teléfonos 
+* Que arriba de la pantalla se muestre la línea de tiempo restante 
+* Que las tarjetas tengan movimiento cuando se destapan y cuando se cierran
+* Montarla en Google drive, para poder utilizarla desde cualquier máquina o navegador
