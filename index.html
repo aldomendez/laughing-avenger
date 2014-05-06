@@ -1,62 +1,154 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Control de Hornos de plasma</title>
-	<link rel="stylesheet" href="semanticUi/css/semantic.css">
+  <meta charset="UTF-8">
+  <title>Control de Hornos de plasma</title>
+  <link rel="stylesheet" href="semanticUi/css/semantic.css">
 </head>
 <body>
-<div class="ui one column page grid">
+<div class="ui one column page grid" id="main">
+</div>
 
-  <div class="column">
+<script id='template' type='text/ractive' style="display:none">
+    <div class="column">
+
     <div class="ui segment">
-      <b>Inbox</b>
-      <p>Welcome to your inbox. Would you like to see more information?</p>
+      <b>Sandbox para elementos de la aplicacion</b>
     </div>
  
+    <div class="ui four steps">
+      <div class="ui disabled step">
+        Proceso
+      </div>
+      <div class="ui disabled step">
+        Materiales
+      </div>
+      <div class="ui active step">
+        Limpieza 
+        <!-- Barra de progreso del horneado -->
+        <!-- <div class="ui bottom green attached progress">
+          <div class="bar" style="width: 60%;"></div>
+        </div> -->
+      </div>
+      <div class="ui disabled step">
+        Descarga
+      </div>
+    </div>
 
 
-	<div class="ui warning  form segment">
-	  <div class="ui warning message">
-	    <div class="header">Could you check something!</div>
-	    <ul class="list">
-	      <li>You forgot your <b>first name</b></li>
-	      <li>And also your <b>last name</b></li>
-	    </ul>
-	  </div>
-	  <div class="two error fields">
-	    <div class="field">
-	      <label>First Name</label>
-	      <input placeholder="First Name" type="text">
-	      <div class="ui red pointing above ui label">Enter a first name</div>
-	    </div>
-	    <div class="field">
-	      <label>Last Name</label>
-	      <input placeholder="Last Name" type="text">
-	      <div class="ui red pointing above ui label">Enter a last name</div>
-	    </div>
-	  </div>
-	  <div class="field">
-	    <label>Username</label>
-	    <input placeholder="Username" type="text">
-	  </div>
-	  <div class="field">
-	    <label>Password</label>
-	    <input type="password">
-	  </div>
-	  <div class="inline field">
-	    <div class="ui checkbox">
-	      <input type="checkbox">
-	      <label>I agree to the Terms and Conditions</label>
-	    </div>
-	  </div>
-	  <div class="ui blue submit button">Submit</div>
-	</div>
-</div>
+    <table class="ui five column table segment">
+      <thead>
+        <tr><th>Id</th>
+        <th>Material</th>
+        <th>Ciclo</th>
+        <th>Cantidad</th>
+        <th>Carrier</th>
+      </tr></thead>
+      <tbody>
+        {{#materialEnHorno:i}}
+        <tr intro="fly">
+          <td>{{i+1}}</td>
+          <td>Glass Rail</td>
+          <td>1er ciclo</td>
+          <td>120</td>
+          <!-- <td><a href=""><i class="remove rign icon"></i>eliminar</a></td> -->
+          <td>148957654</td>
+        </tr>
+        {{/materialEnHorno}}
+      </tbody>
+      <tfoot>
+        <tr><th colspan="5">
+          <div class="ui small blue labeled fluid icon button">
+          <i class="play circle icon"></i> Iniciar el plasma O<sub>2</sub></div>
+        </th>
+      </tr>
+      <tr><th colspan="5">
+        <div class="ui active green progress">
+          <div class="bar" style="width: 80%;"></div>
+        </div>
+        </th>
+      </tr></tfoot>
+    </table>
 
 
-</div>
+    {{#processSelection}}
+    <div class="ui connected three items">
+      <div class="item">
+        <div class="image" on-click="selectProcess">
+          <img src="/images/demo/highres4.jpg">
+        </div>
+        <div class="content">
+          <div class="name">Glass/ Alps/ PLC</div>
+        </div>
+      </div>
+      <div class="item" on-click="selectProcess">
+        <div class="image">
+          <img src="/images/demo/highres5.jpg">
+        </div>
+        <div class="content">
+          <div class="name">Shim (Arriba)</div>
+        </div>
+      </div>
+      <div class="item" on-click="selectProcess">
+        <div class="image">
+          <img src="/images/demo/highres3.jpg">
+        </div>
+        <div class="content">
+          <div class="name">Shim (Abajo)</div>
+        </div>
+      </div>
+    </div>
+    {{/processSelection}}
 
 
+    {{#ingresarMateriales:i}}
+      {{>inputMaterial}}
+    {{/ingresarMateriales}}
+
+
+    <!-- {{>inputMaterial}} -->
+    <div class="ui warning  form segment" intro="fly">
+      <div class="ui top purple attached label">{{type}}</div>
+      <div class="ui form">
+        <div class="ui four fields">
+          <div class="field">
+            <label>Cantidad</label>
+            <input type="text" value="{{qty}}">
+          </div>
+          <div class="field">
+            <label>Lote</label>
+            <input type="text" value="{{lote}}">
+          </div>
+          <div class="grouped inline field">
+            <div class="field">
+              <label>Lado</label>
+              <div class="ui radio checkbox">
+                <input id="choice-{{i}}1" type="radio" name="fruit{{i}}" checked="">
+                <label for="choice-{{i}}1"><i class="angle up icon"></i> Arriba</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input id="choice-{{i}}2" type="radio" name="fruit{{i}}" checked="">
+                <label for="choice-{{i}}2"><i class="angle down icon"></i> Abajo</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <a class="ui blue submit button "><i class="plus icon centered"></i> plasma O<sub>2</sub></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- {{/inputMaterial}} -->
+
+
+  <!-- END COLUMN -->
+  </div>
+</script>
+
+<script src="public/vendor/Ractive.js"></script>
+<script src="public/vendor/ractive-transitions-fly.js"></script>
+<script src="public/js/main.js"></script>
 </body>
 </html>

@@ -1,3 +1,3 @@
-CoffeeScript boilerplate
-========================
+Control de Hornos de plasma
+===========================
 
