@@ -1,5 +1,5 @@
 (function() {
-  var Material, Plasma, Process, ProgressBar, Step, User, r;
+  var Err, Material, Plasma, Process, ProgressBar, Step, User, plasma, r, step;
 
   Material = (function() {
     function Material(type, side, lot, qty) {
@@ -14,7 +14,9 @@
   })();
 
   Plasma = (function() {
-    function Plasma() {}
+    function Plasma() {
+      this.list = [];
+    }
 
     return Plasma;
 
@@ -36,9 +38,16 @@
 
   Step = (function() {
     function Step() {
-      this.steps = ['Proceso', 'Materiales', 'Horneado', 'Descarga'];
-      this.actualStep = 0;
+      var elements;
+      this.steps = ['Seleccion', 'Materiales', 'Horneado', 'Descarga'];
+      this.actualStep = 1;
+      this.states = [['active', 'disabled', 'disabled', 'disabled'], ['', 'active', 'disabled', 'disabled'], ['disabled', 'disabled', 'active', 'disabled'], ['', 'disabled', 'disabled', 'active']];
+      elements = {};
     }
+
+    Step.prototype.next = function() {};
+
+    Step.prototype.restart = function() {};
 
     Step.prototype.goto = function(stepId) {};
 
@@ -53,24 +62,32 @@
 
   })();
 
+  Err = (function() {
+    function Err() {}
+
+    return Err;
+
+  })();
+
+  step = new Step;
+
+  plasma = new Plasma;
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
   r = new Ractive({
     el: 'main',
     template: '#template',
     data: {
-      processSelection: false,
-      Plasma: [],
-      materialEnHorno: [
-        {
-          status: 'hola',
-          element: 'otro element'
-        }, {
-          status: 'hola',
-          element: 'otro element'
-        }, {
-          status: 'hola',
-          element: 'otro element'
-        }
-      ],
+      process: step,
+      plasma: plasma,
+      materialEnHorno: [],
       ingresarMateriales: [
         {
           type: 'PLC',
@@ -87,7 +104,9 @@
     }
   });
 
-  r.on('selectProcess', function(event) {
+  window.r = r;
+
+  r.on('test', function(event) {
     return console.log(event);
   });
 

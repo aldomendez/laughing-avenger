@@ -17,52 +17,50 @@
     </div>
  
     <div class="ui four steps">
-      <div class="ui disabled step">
-        Proceso
+      <div class="ui {{process.states[process.actualStep][0]}} step">
+        {{process.steps.0}}
       </div>
-      <div class="ui disabled step">
-        Materiales
+      <div class="ui {{process.states[process.actualStep][1]}} step">
+        {{process.steps.1}}
       </div>
-      <div class="ui active step">
-        Limpieza 
-        <!-- Barra de progreso del horneado -->
-        <!-- <div class="ui bottom green attached progress">
-          <div class="bar" style="width: 60%;"></div>
-        </div> -->
+      <div class="ui {{process.states[process.actualStep][2]}} step">
+        {{process.steps.2}}
       </div>
-      <div class="ui disabled step">
-        Descarga
+      <div class="ui {{process.states[process.actualStep][3]}} step">
+        {{process.steps.3}}
       </div>
     </div>
 
 
-    <table class="ui five column table segment">
+    <table class="ui table segment">
       <thead>
         <tr><th>Id</th>
         <th>Material</th>
         <th>Ciclo</th>
         <th>Cantidad</th>
+        <th>Lote</th>
         <th>Carrier</th>
       </tr></thead>
       <tbody>
-        {{#materialEnHorno:i}}
+        {{#plasma.list:i}}
         <tr intro="fly">
           <td>{{i+1}}</td>
-          <td>Glass Rail</td>
-          <td>1er ciclo</td>
-          <td>120</td>
+          <td>{{type}}</td>
+          <td>{{side}}</td>
+          <td>{{qty}}</td>
+          <td>{{lot}}</td>
           <!-- <td><a href=""><i class="remove rign icon"></i>eliminar</a></td> -->
-          <td>148957654</td>
+          <td>{{carrier}}</td>
         </tr>
-        {{/materialEnHorno}}
+        {{/plasma.list}}
       </tbody>
       <tfoot>
-        <tr><th colspan="5">
+        <tr><th colspan="6">
           <div class="ui small blue labeled fluid icon button">
           <i class="play circle icon"></i> Iniciar el plasma O<sub>2</sub></div>
         </th>
       </tr>
-      <tr><th colspan="5">
+      <tr><th colspan="6">
         <div class="ui active green progress">
           <div class="bar" style="width: 80%;"></div>
         </div>
@@ -71,17 +69,17 @@
     </table>
 
 
-    {{#processSelection}}
+    {{#process.actualStep == 1}}
     <div class="ui connected three items">
       <div class="item">
-        <div class="image" on-click="selectProcess">
+        <div class="image" >
           <img src="/images/demo/highres4.jpg">
         </div>
         <div class="content">
           <div class="name">Glass/ Alps/ PLC</div>
         </div>
       </div>
-      <div class="item" on-click="selectProcess">
+      <div class="item" >
         <div class="image">
           <img src="/images/demo/highres5.jpg">
         </div>
@@ -89,16 +87,16 @@
           <div class="name">Shim (Arriba)</div>
         </div>
       </div>
-      <div class="item" on-click="selectProcess">
+      <div class="item" >
         <div class="image">
           <img src="/images/demo/highres3.jpg">
         </div>
         <div class="content">
-          <div class="name">Shim (Abajo)</div>
+          <div class="name">PLC (max power)</div>
         </div>
       </div>
     </div>
-    {{/processSelection}}
+    {{/process.actualStep}}
 
 
     {{#ingresarMateriales:i}}

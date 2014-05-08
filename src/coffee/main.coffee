@@ -3,6 +3,7 @@ class Material
 
 class Plasma
   constructor: () ->
+    @list = []
 
 class Process
   constructor: () ->
@@ -13,28 +14,56 @@ class User
 class Step
   constructor: () ->
     @steps = [
-      'Proceso'
+      'Seleccion'
       'Materiales'
       'Horneado'
       'Descarga'
     ]
-    @actualStep = 0
-  goto:(stepId)->
+    @actualStep = 1
+    @states = [
+      ['active','disabled','disabled','disabled']
+      ['','active','disabled','disabled']
+      ['disabled','disabled','active','disabled']
+      ['','disabled','disabled','active']
+    ]
+    elements={
 
+    }
+  next:->
+    # debera de haber varios candados al moverse
+    # de un paso a otro
+  restart:()->
+    # Reinicializa los pasos para un horno en particular
+  goto:(stepId)-> 
+    # Si la lista de materieles en el horno esta vacia
+    # el proceso no puede cambiar de materiales a horneado
+
+    # Se puede regresar hasta el principio.
 class ProgressBar
     constructor: () ->
-    
+
+
+# Muestra la lista de errores que deberan de ser mostrados al usuario
+# 
+class Err
+  constructor: () ->
+    # ...
+  
+
+step = new Step
+plasma = new Plasma
+plasma.list.push new Material 'Glass','up','T135461','200'
+plasma.list.push new Material 'Glass','up','T135461','200'
+plasma.list.push new Material 'Glass','up','T135461','200'
+plasma.list.push new Material 'Glass','up','T135461','200'
+
 r = new Ractive {
   el: 'main'
   template:'#template'
   data:
-    processSelection:false
-    Plasma:[]
-    materialEnHorno:[
-      {status:'hola', element:'otro element'}
-      {status:'hola', element:'otro element'}
-      {status:'hola', element:'otro element'}
-    ]
+    process: step
+    plasma:plasma
+    materialEnHorno:[]
     ingresarMateriales:[
       {
         type:'PLC'
@@ -51,5 +80,9 @@ r = new Ractive {
     ]
 }
 
-r.on 'selectProcess', (event)->
+window.r = r
+
+
+
+r.on 'test', (event)->
   console.log event
