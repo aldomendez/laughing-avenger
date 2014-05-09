@@ -18,7 +18,7 @@
  
     <div class="ui four steps">
       <div class="ui {{process.states[process.actualStep][0]}} step">
-        {{process.steps.0}}
+        {{process.steps.0}} ({{plasma.program}})
       </div>
       <div class="ui {{process.states[process.actualStep][1]}} step">
         {{process.steps.1}}
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-
+    {{#process.elements.table}}
     <table class="ui table segment">
       <thead>
         <tr><th>Id</th>
@@ -43,7 +43,7 @@
       </tr></thead>
       <tbody>
         {{#plasma.list:i}}
-        <tr intro="fly">
+        <tr>
           <td>{{i+1}}</td>
           <td>{{type}}</td>
           <td>{{side}}</td>
@@ -55,23 +55,28 @@
         {{/plasma.list}}
       </tbody>
       <tfoot>
+        {{#process.elements.startButton}}
         <tr><th colspan="6">
-          <div class="ui small blue labeled fluid icon button">
+          <div class="ui small blue labeled fluid icon button" on-click="startPlasma">
           <i class="play circle icon"></i> Iniciar el plasma O<sub>2</sub></div>
-        </th>
-      </tr>
-      <tr><th colspan="6">
-        <div class="ui active green progress">
-          <div class="bar" style="width: 80%;"></div>
-        </div>
-        </th>
-      </tr></tfoot>
+        </th></tr>
+        {{/process.elements.startButton}}
+        {{#process.elements.progressBar}}
+        <tr><th colspan="6">
+          <div class="ui active green progress">
+            <div class="bar" style="width: 80%;"></div>
+          </div>
+          </th>
+        </tr>
+        {{/process.elements.progressBar}}
+      </tfoot>
     </table>
+    {{/process.elements.table}}
 
 
-    {{#process.actualStep == 1}}
+    {{#process.elements.processSelector}}
     <div class="ui connected three items">
-      <div class="item">
+      <div class="item" on-click="selectProgram_1">
         <div class="image" >
           <img src="/images/demo/highres4.jpg">
         </div>
@@ -79,7 +84,7 @@
           <div class="name">Glass/ Alps/ PLC</div>
         </div>
       </div>
-      <div class="item" >
+      <div class="item" on-click="selectProgram_3">
         <div class="image">
           <img src="/images/demo/highres5.jpg">
         </div>
@@ -87,7 +92,7 @@
           <div class="name">Shim (Arriba)</div>
         </div>
       </div>
-      <div class="item" >
+      <div class="item" on-click="selectProgram_5">
         <div class="image">
           <img src="/images/demo/highres3.jpg">
         </div>
@@ -96,16 +101,17 @@
         </div>
       </div>
     </div>
-    {{/process.actualStep}}
+    {{/process.elements.processSelector}}
 
-
-    {{#ingresarMateriales:i}}
-      {{>inputMaterial}}
-    {{/ingresarMateriales}}
+    {{#process.elements.elementsForm}}
+      {{#ingresarMateriales:i}}
+        {{>inputMaterial}}
+      {{/ingresarMateriales}}
+    {{/process.elements.elementsForm}}
 
 
     <!-- {{>inputMaterial}} -->
-    <div class="ui warning  form segment" intro="fly">
+    <div class="ui warning  form segment">
       <div class="ui top purple attached label">{{type}}</div>
       <div class="ui form">
         <div class="ui four fields">
@@ -146,7 +152,7 @@
 </script>
 
 <script src="public/vendor/Ractive.js"></script>
-<script src="public/vendor/ractive-transitions-fly.js"></script>
+<!-- <script src="public/vendor/ractive-transitions-fly.js"></script> -->
 <script src="public/js/main.js"></script>
 </body>
 </html>

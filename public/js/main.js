@@ -1,5 +1,5 @@
 (function() {
-  var Err, Material, Plasma, Process, ProgressBar, Step, User, plasma, r, step;
+  var Err, Material, Plasma, Process, ProgressBar, Step, User, app, plasma, step;
 
   Material = (function() {
     function Material(type, side, lot, qty) {
@@ -38,14 +38,62 @@
 
   Step = (function() {
     function Step() {
-      var elements;
+      this.actualStep = 0;
       this.steps = ['Seleccion', 'Materiales', 'Horneado', 'Descarga'];
-      this.actualStep = 1;
-      this.states = [['active', 'disabled', 'disabled', 'disabled'], ['', 'active', 'disabled', 'disabled'], ['disabled', 'disabled', 'active', 'disabled'], ['', 'disabled', 'disabled', 'active']];
-      elements = {};
+      this.states = [['active', '', '', ''], ['', 'active', '', ''], ['', '', 'active', ''], ['', '', '', 'active']];
+
+      /*
+          [
+            ['active','disabled','disabled','disabled']
+            ['disabled','active','disabled','disabled']
+            ['disabled','disabled','active','disabled']
+            ['disabled','disabled','disabled','active']
+          ]
+       */
+      this.elements = {
+        table: false,
+        startButton: false,
+        progressBar: false,
+        processSelector: true,
+        elementsForm: false
+      };
+      this.elementsVisivility = [
+        {
+          table: false,
+          startButton: false,
+          progressBar: false,
+          processSelector: true,
+          elementsForm: false
+        }, {
+          table: true,
+          startButton: true,
+          progressBar: false,
+          processSelector: false,
+          elementsForm: true
+        }, {
+          table: true,
+          startButton: false,
+          progressBar: true,
+          processSelector: false,
+          elementsForm: false
+        }, {
+          table: true,
+          startButton: false,
+          progressBar: false,
+          processSelector: false,
+          elementsForm: false
+        }
+      ];
     }
 
-    Step.prototype.next = function() {};
+    Step.prototype.next = function() {
+      console.log("next " + this.actualStep);
+      if (this.actualStep <= 0 && this.actualStep < 4) {
+        console.log("next if " + this.actualStep);
+        app.set('process.actualStep', this.actualStep + 1);
+        return app.set('process.elements', this.elementsVisivility[this.actualStep]);
+      }
+    };
 
     Step.prototype.restart = function() {};
 
@@ -75,7 +123,9 @@
 
   plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
 
-  r = new Ractive({
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  app = new Ractive({
     el: 'main',
     template: '#template',
     data: {
@@ -84,7 +134,7 @@
       materialEnHorno: [],
       ingresarMateriales: [
         {
-          type: 'PLC',
+          type: 'Glass',
           qty: 10,
           lote: 'P545465',
           lado: 'arriba'
@@ -98,16 +148,43 @@
     }
   });
 
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
-  window.r = r;
-
-  r.on('test', function(event) {
-    return console.log(event);
+  app.on({
+    'test': function(event) {
+      return console.log(event);
+    },
+    'selectProgram_1': function() {
+      app.set({
+        'plasma.program': 1
+      });
+      return step.next();
+    },
+    'selectProgram_3': function() {
+      app.set({
+        'plasma.program': 3
+      });
+      return step.next();
+    },
+    'selectProgram_5': function() {
+      app.set({
+        'plasma.program': 5
+      });
+      return step.next();
+    },
+    'startPlasma': function(event) {
+      if (event.context.plasma.list.length > 0) {
+        return step.next();
+      }
+    }
   });
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  window.step = step;
+
+  window.app = app;
+
+  window.Material = Material;
 
 }).call(this);

@@ -1,6 +1,6 @@
 (function() {
-  describe('Deck', function() {
-    return it("");
+  describe('Step', function() {
+    return it("should be available");
   });
 
 }).call(this);
