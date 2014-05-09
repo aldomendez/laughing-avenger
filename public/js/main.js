@@ -75,12 +75,6 @@
 
   plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
 
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
   r = new Ractive({
     el: 'main',
     template: '#template',
@@ -103,6 +97,12 @@
       ]
     }
   });
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
+
+  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
 
   window.r = r;
 

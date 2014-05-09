@@ -53,9 +53,6 @@ class Err
 step = new Step
 plasma = new Plasma
 plasma.list.push new Material 'Glass','up','T135461','200'
-plasma.list.push new Material 'Glass','up','T135461','200'
-plasma.list.push new Material 'Glass','up','T135461','200'
-plasma.list.push new Material 'Glass','up','T135461','200'
 
 r = new Ractive {
   el: 'main'
@@ -79,6 +76,10 @@ r = new Ractive {
       }
     ]
 }
+
+plasma.list.push new Material 'Glass','up','T135461','200'
+plasma.list.push new Material 'Glass','up','T135461','200'
+plasma.list.push new Material 'Glass','up','T135461','200'
 
 window.r = r
 
