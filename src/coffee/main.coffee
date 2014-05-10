@@ -111,13 +111,13 @@ app = new Ractive {
         type:'Glass'
         qty:10
         lote:'P545465'
-        lado:'arriba'
+        lado:''
       },
       {
         type:'ALPS'
         qty:10
         lote:20
-        lado:'arriba'
+        lado:''
       }
     ]
 }
@@ -140,12 +140,13 @@ app.on
   'startPlasma':(event)->
     if event.context.plasma.list.length > 0
       step.next()
+  'addMaterialToList':(event)->
+    m = event.context
+    plasma.list.push new Material m.type, m.lado, m.lote, m.qty
 
 # app.observe 'plasma.program', (actual,old)->
 #   console.log actual
 
-plasma.list.push new Material 'Glass','up','T135461','200'
-plasma.list.push new Material 'Glass','up','T135461','200'
 
 window.step = step
 window.app = app

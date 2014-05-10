@@ -137,12 +137,12 @@
           type: 'Glass',
           qty: 10,
           lote: 'P545465',
-          lado: 'arriba'
+          lado: ''
         }, {
           type: 'ALPS',
           qty: 10,
           lote: 20,
-          lado: 'arriba'
+          lado: ''
         }
       ]
     }
@@ -174,12 +174,13 @@
       if (event.context.plasma.list.length > 0) {
         return step.next();
       }
+    },
+    'addMaterialToList': function(event) {
+      var m;
+      m = event.context;
+      return plasma.list.push(new Material(m.type, m.lado, m.lote, m.qty));
     }
   });
-
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
-
-  plasma.list.push(new Material('Glass', 'up', 'T135461', '200'));
 
   window.step = step;
 

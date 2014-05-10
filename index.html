@@ -49,7 +49,7 @@
           <td>{{side}}</td>
           <td>{{qty}}</td>
           <td>{{lot}}</td>
-          <!-- <td><a href=""><i class="remove rign icon"></i>eliminar</a></td> -->
+          <td><a href=""><i class="remove rign icon"></i>eliminar</a></td>
           <td>{{carrier}}</td>
         </tr>
         {{/plasma.list}}
@@ -127,19 +127,19 @@
             <div class="field">
               <label>Lado</label>
               <div class="ui radio checkbox">
-                <input id="choice-{{i}}1" type="radio" name="fruit{{i}}" checked="">
+                <input id="choice-{{i}}1" type="radio" name="{{lado}}" value="arriba">
                 <label for="choice-{{i}}1"><i class="angle up icon"></i> Arriba</label>
               </div>
             </div>
             <div class="field">
               <div class="ui radio checkbox">
-                <input id="choice-{{i}}2" type="radio" name="fruit{{i}}" checked="">
+                <input id="choice-{{i}}2" type="radio" name="{{lado}}" value="abajo">
                 <label for="choice-{{i}}2"><i class="angle down icon"></i> Abajo</label>
               </div>
-            </div>
+            </div>  
           </div>
           <div class="field">
-            <a class="ui blue submit button "><i class="plus icon centered"></i> plasma O<sub>2</sub></a>
+            <a class="ui blue submit button" on-click="addMaterialToList"><i class="plus icon centered"></i> plasma O<sub>2</sub></a>
           </div>
         </div>
       </div>
