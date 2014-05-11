@@ -49,8 +49,12 @@
           <td>{{side}}</td>
           <td>{{qty}}</td>
           <td>{{lot}}</td>
-          <td><a href=""><i class="remove rign icon"></i>eliminar</a></td>
+        {{#process.elements.startButton}}
+          <td><a href="#" on-click='deleteMaterialFromList'><i class="remove rign icon"></i>eliminar</a></td>
+        {{/process.elements.startButton}}
+        {{^process.elements.startButton}}
           <td>{{carrier}}</td>
+        {{/process.elements.startButton}}
         </tr>
         {{/plasma.list}}
       </tbody>

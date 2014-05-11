@@ -142,12 +142,16 @@ app.on
       step.next()
   'addMaterialToList':(event)->
     m = event.context
+    console.log event
     plasma.list.push new Material m.type, m.lado, m.lote, m.qty
+  'deleteMaterialFromList':(event)->
+    console.log event
+    event.original.preventDefault()
 
 # app.observe 'plasma.program', (actual,old)->
 #   console.log actual
 
-
+window.plasma = plasma
 window.step = step
 window.app = app
 window.Material = Material

@@ -178,9 +178,16 @@
     'addMaterialToList': function(event) {
       var m;
       m = event.context;
+      console.log(event);
       return plasma.list.push(new Material(m.type, m.lado, m.lote, m.qty));
+    },
+    'deleteMaterialFromList': function(event) {
+      console.log(event);
+      return event.original.preventDefault();
     }
   });
+
+  window.plasma = plasma;
 
   window.step = step;
 
