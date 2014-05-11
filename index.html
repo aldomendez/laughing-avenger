@@ -18,7 +18,7 @@
  
     <div class="ui four steps">
       <div class="ui {{process.states[process.actualStep][0]}} step">
-        {{process.steps.0}} ({{plasma.program}})
+        {{process.steps.0}} (-=<b> {{plasma.program}} </b>=-)
       </div>
       <div class="ui {{process.states[process.actualStep][1]}} step">
         {{process.steps.1}}
@@ -39,7 +39,12 @@
         <th>Ciclo</th>
         <th>Cantidad</th>
         <th>Lote</th>
+        {{#process.elements.startButton}}
+        <th>Herramientas</th>
+        {{/process.elements.startButton}}
+        {{#process.elements.progressBar}}
         <th>Carrier</th>
+        {{/process.elements.progressBar}}
       </tr></thead>
       <tbody>
         {{#plasma.list:i}}
@@ -60,9 +65,13 @@
       </tbody>
       <tfoot>
         {{#process.elements.startButton}}
-        <tr><th colspan="6">
-          <div class="ui small blue labeled fluid icon button" on-click="startPlasma">
-          <i class="play circle icon"></i> Iniciar el plasma O<sub>2</sub></div>
+        <tr><th colspan="6"> 
+          <div class="ui 2 fluid buttons">
+            <div class="ui small green labeled icon button" on-click="startPlasma">
+              Iniciar el plasma O<sub>2</sub></div>
+            <div class="ui small red labeled icon button" on-click="cancelPlasma">
+              Cancelar</div>
+          </div>
         </th></tr>
         {{/process.elements.startButton}}
         {{#process.elements.progressBar}}

@@ -5,8 +5,47 @@ class Plasma
   constructor: () ->
     @list = []
 
-class Process
+class Materiales
   constructor: () ->
+    @materiales = 
+      '1':[{
+        type:'Glass Rail'
+        qty:''
+        lote:''
+        lado:''
+      },{
+        type:'ALPS'
+        qty:''
+        lote:''
+        lado:''
+      },{
+        type:'PLC/ PMQPSK/ ICRX2'
+        qty:''
+        lote:''
+        lado:'abajo'
+      },{
+        type:'Shim (Abajo)'
+        qty:''
+        lote:''
+        lado:'abajo'
+      }],
+      '3':[{
+        type:'Shim (Arriba)'
+        qty:''
+        lote:''
+        lado:'arriba'
+      }],
+      '5':[{
+        type:'PLC (Abajo)'
+        qty:''
+        lote:''
+        lado:'abajo'
+      }]
+  list:(id)->
+    # Retorna: arreglo de objetos
+    # De acuerdo a el numero de programa, contruye una lista
+    # de los materiales que se pueden ingresar al horno
+    @materiales[id]
 
 class User
   constructor: ()->
@@ -71,13 +110,14 @@ class Step
       }
     ]
   next:()->
-    console.log "next #{@actualStep}"
-    if @actualStep <= 0 and @actualStep < 4
-      console.log "next if #{@actualStep}"
+    if @actualStep >= 0 and @actualStep < 4
       app.set 'process.actualStep', @actualStep + 1
       app.set 'process.elements', @elementsVisivility[@actualStep]
   restart:()->
-    # Reinicializa los pasos para un horno en particular
+    # Reinicializa los hornos hasta la seleccion del programa
+    app.set
+      'process.actualStep':0
+      'process.elements':@elementsVisivility[0]
   goto:(stepId)-> 
     # Si la lista de materieles en el horno esta vacia
     # el proceso no puede cambiar de materiales a horneado
@@ -91,13 +131,16 @@ class ProgressBar
 # 
 class Err
   constructor: () ->
-    # ...
-  
+    @list = []
+  add:(text)->
+    @list.push text
+  clear:()->
+    @list.splice 0,@list.length
 
+  
+materialList = new Materiales
 step = new Step
 plasma = new Plasma
-plasma.list.push new Material 'Glass','up','T135461','200'
-plasma.list.push new Material 'Glass','up','T135461','200'
 
 app = new Ractive {
   el: 'main'
@@ -106,21 +149,20 @@ app = new Ractive {
     process: step
     plasma:plasma
     materialEnHorno:[]
-    ingresarMateriales:[
-      {
-        type:'Glass'
-        qty:10
-        lote:'P545465'
+    ingresarMateriales:[{
+        type:'PLC (Abajo)'
+        qty:''
+        lote:''
         lado:''
-      },
-      {
-        type:'ALPS'
-        qty:10
-        lote:20
-        lado:''
-      }
-    ]
+      }]
 }
+
+setMaterialListByProgramId = (id)->
+  app.data.ingresarMateriales.splice 0, 100
+  for material in materialList.list(id)
+    console.log material
+    app.data.ingresarMateriales.push material
+  
 
 app.on 
   'test': (event)->
@@ -128,29 +170,40 @@ app.on
   'selectProgram_1':()->
     app.set
       'plasma.program':1
+    setMaterialListByProgramId 1
     step.next()
   'selectProgram_3':()->
     app.set
       'plasma.program':3
+    setMaterialListByProgramId 3
     step.next()
   'selectProgram_5':()->
     app.set
       'plasma.program':5
+    setMaterialListByProgramId 5
     step.next()
   'startPlasma':(event)->
     if event.context.plasma.list.length > 0
       step.next()
+    else
+      alert "No hay materiales cargados para ingresar al horno."
+  'cancelPlasma':(e)->
+    app.set 'plasma.program',''
+    step.restart()
   'addMaterialToList':(event)->
+    # console.log event
     m = event.context
-    console.log event
+    # if m.type = '' then 
     plasma.list.push new Material m.type, m.lado, m.lote, m.qty
-  'deleteMaterialFromList':(event)->
-    console.log event
-    event.original.preventDefault()
+  'deleteMaterialFromList':(e)->
+    e.original.preventDefault()
+    plasma.list.shift e.index.i
+
 
 # app.observe 'plasma.program', (actual,old)->
 #   console.log actual
 
+window.materialList = materialList
 window.plasma = plasma
 window.step = step
 window.app = app
