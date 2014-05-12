@@ -125,6 +125,29 @@ class Step
     # Se puede regresar hasta el principio.
 class ProgressBar
     constructor: () ->
+      @percent = 0
+    start:()->
+      @program = app.get 'plasma.program'
+      switch @program
+        when 1 then @minutes = 15
+        when 3 then @minutes = 2.5
+        when 5 then @minutes = 15
+      @inicio = new Date()
+      @final = new Date()
+      @final = new Date @final.setSeconds @final.getSeconds() + @minutes*60
+      @tickCounter = 0
+      @tickerId = setInterval @tick, 600
+    tick:()=>
+      @tickCounter++
+      now = new Date()
+      if now > @final 
+        clearInterval @tickerId
+        app.set 'pBar.progress', ''
+        step.next()
+      @percent = Math.floor ((now - @inicio) / (@final - @inicio))*100
+      console.log @percent
+      app.set 'pBar.percent', @percent
+
 
 
 # Muestra la lista de errores que deberan de ser mostrados al usuario
@@ -141,6 +164,7 @@ class Err
 materialList = new Materiales
 step = new Step
 plasma = new Plasma
+progress = new ProgressBar
 
 app = new Ractive {
   el: 'main'
@@ -150,6 +174,7 @@ app = new Ractive {
     plasma:plasma
     materialEnHorno:[]
     ingresarMateriales:[]
+    pBar:progress
 }
 
 setMaterialListByProgramId = (id)->
@@ -180,6 +205,7 @@ app.on
   'startPlasma':(event)->
     if event.context.plasma.list.length > 0
       step.next()
+      progress.start()
     else
       alert "No hay materiales cargados para ingresar al horno."
   'cancelPlasma':(e)->
@@ -204,7 +230,7 @@ app.on
 
 # app.observe 'plasma.program', (actual,old)->
   # console.log actual
-
+window.progress = progress
 window.materialList = materialList
 window.plasma = plasma
 window.step = step

@@ -24,7 +24,7 @@
         {{process.steps.1}}
       </div>
       <div class="ui {{process.states[process.actualStep][2]}} step">
-        {{process.steps.2}}
+        {{process.steps.2}} {{pBar.percent}}
       </div>
       <div class="ui {{process.states[process.actualStep][3]}} step">
         {{process.steps.3}}
@@ -42,9 +42,9 @@
         {{#process.elements.startButton}}
         <th>Herramientas</th>
         {{/process.elements.startButton}}
-        {{#process.elements.progressBar}}
+        {{^process.elements.startButton}}
         <th>Carrier</th>
-        {{/process.elements.progressBar}}
+        {{/process.elements.startButton}}
       </tr></thead>
       <tbody>
         {{#plasma.list:i}}
@@ -77,7 +77,7 @@
         {{#process.elements.progressBar}}
         <tr><th colspan="6">
           <div class="ui active green progress">
-            <div class="bar" style="width: 80%;"></div>
+            <div class="bar" style="width: {{pBar.percent}}%;"></div>
           </div>
           </th>
         </tr>

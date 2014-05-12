@@ -1,5 +1,6 @@
 (function() {
-  var Err, Material, Materiales, Plasma, ProgressBar, Step, User, app, materialList, plasma, setMaterialListByProgramId, step;
+  var Err, Material, Materiales, Plasma, ProgressBar, Step, User, app, materialList, plasma, progress, setMaterialListByProgramId, step,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Material = (function() {
     function Material(type, side, lot, qty) {
@@ -153,7 +154,43 @@
   })();
 
   ProgressBar = (function() {
-    function ProgressBar() {}
+    function ProgressBar() {
+      this.tick = __bind(this.tick, this);
+      this.percent = 0;
+    }
+
+    ProgressBar.prototype.start = function() {
+      this.program = app.get('plasma.program');
+      switch (this.program) {
+        case 1:
+          this.minutes = 15;
+          break;
+        case 3:
+          this.minutes = 2.5;
+          break;
+        case 5:
+          this.minutes = 15;
+      }
+      this.inicio = new Date();
+      this.final = new Date();
+      this.final = new Date(this.final.setSeconds(this.final.getSeconds() + this.minutes * 60));
+      this.tickCounter = 0;
+      return this.tickerId = setInterval(this.tick, 600);
+    };
+
+    ProgressBar.prototype.tick = function() {
+      var now;
+      this.tickCounter++;
+      now = new Date();
+      if (now > this.final) {
+        clearInterval(this.tickerId);
+        app.set('pBar.progress', '');
+        step.next();
+      }
+      this.percent = Math.floor(((now - this.inicio) / (this.final - this.inicio)) * 100);
+      console.log(this.percent);
+      return app.set('pBar.percent', this.percent);
+    };
 
     return ProgressBar;
 
@@ -182,6 +219,8 @@
 
   plasma = new Plasma;
 
+  progress = new ProgressBar;
+
   app = new Ractive({
     el: 'main',
     template: '#template',
@@ -189,7 +228,8 @@
       process: step,
       plasma: plasma,
       materialEnHorno: [],
-      ingresarMateriales: []
+      ingresarMateriales: [],
+      pBar: progress
     }
   });
 
@@ -230,7 +270,8 @@
     },
     'startPlasma': function(event) {
       if (event.context.plasma.list.length > 0) {
-        return step.next();
+        step.next();
+        return progress.start();
       } else {
         return alert("No hay materiales cargados para ingresar al horno.");
       }
@@ -255,6 +296,8 @@
       return plasma.list.splice(0, 1000);
     }
   });
+
+  window.progress = progress;
 
   window.materialList = materialList;
 
