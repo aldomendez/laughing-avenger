@@ -149,24 +149,19 @@ app = new Ractive {
     process: step
     plasma:plasma
     materialEnHorno:[]
-    ingresarMateriales:[{
-        type:'PLC (Abajo)'
-        qty:''
-        lote:''
-        lado:''
-      }]
+    ingresarMateriales:[]
 }
 
 setMaterialListByProgramId = (id)->
   app.data.ingresarMateriales.splice 0, 100
   for material in materialList.list(id)
-    console.log material
+    
     app.data.ingresarMateriales.push material
   
 
 app.on 
   'test': (event)->
-    console.log event
+    
   'selectProgram_1':()->
     app.set
       'plasma.program':1
@@ -190,18 +185,25 @@ app.on
   'cancelPlasma':(e)->
     app.set 'plasma.program',''
     step.restart()
+    plasma.list.splice 0,1000
   'addMaterialToList':(event)->
-    # console.log event
+    # 
     m = event.context
     # if m.type = '' then 
     plasma.list.push new Material m.type, m.lado, m.lote, m.qty
   'deleteMaterialFromList':(e)->
     e.original.preventDefault()
     plasma.list.shift e.index.i
+  'cancelOvenProgress':(event)->
+    app.set 'plasma.program',''
+    step.restart()
+    plasma.list.splice 0,1000
+    # stopProgressCounter()
+
 
 
 # app.observe 'plasma.program', (actual,old)->
-#   console.log actual
+  # console.log actual
 
 window.materialList = materialList
 window.plasma = plasma

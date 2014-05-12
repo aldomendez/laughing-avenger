@@ -10,7 +10,7 @@
 </div>
 
 <script id='template' type='text/ractive' style="display:none">
-    <div class="column">
+  <div class="column">
 
     <div class="ui segment">
       <b>Sandbox para elementos de la aplicacion</b>
@@ -67,9 +67,9 @@
         {{#process.elements.startButton}}
         <tr><th colspan="6"> 
           <div class="ui 2 fluid buttons">
-            <div class="ui small green labeled icon button" on-click="startPlasma">
+            <div class="ui small green button" on-click="startPlasma">
               Iniciar el plasma O<sub>2</sub></div>
-            <div class="ui small red labeled icon button" on-click="cancelPlasma">
+            <div class="ui small red button" on-click="cancelPlasma">
               Cancelar</div>
           </div>
         </th></tr>
@@ -86,6 +86,12 @@
     </table>
     {{/process.elements.table}}
 
+{{#process.elements.progressBar}}
+  <div class="ui black right aligned header">
+    <a class="ui small basic button" href="#cancelProgress" on-click="cancelOvenProgress">Cancelar</a>
+    <div class="sub header">Cancela el proceso y empiezas de nuevo</div>
+  </div>
+{{/process.elements.progressBar}}
 
     {{#process.elements.processSelector}}
     <div class="ui connected three items">

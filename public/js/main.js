@@ -189,14 +189,7 @@
       process: step,
       plasma: plasma,
       materialEnHorno: [],
-      ingresarMateriales: [
-        {
-          type: 'PLC (Abajo)',
-          qty: '',
-          lote: '',
-          lado: ''
-        }
-      ]
+      ingresarMateriales: []
     }
   });
 
@@ -207,16 +200,13 @@
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       material = _ref[_i];
-      console.log(material);
       _results.push(app.data.ingresarMateriales.push(material));
     }
     return _results;
   };
 
   app.on({
-    'test': function(event) {
-      return console.log(event);
-    },
+    'test': function(event) {},
     'selectProgram_1': function() {
       app.set({
         'plasma.program': 1
@@ -247,7 +237,8 @@
     },
     'cancelPlasma': function(e) {
       app.set('plasma.program', '');
-      return step.restart();
+      step.restart();
+      return plasma.list.splice(0, 1000);
     },
     'addMaterialToList': function(event) {
       var m;
@@ -257,6 +248,11 @@
     'deleteMaterialFromList': function(e) {
       e.original.preventDefault();
       return plasma.list.shift(e.index.i);
+    },
+    'cancelOvenProgress': function(event) {
+      app.set('plasma.program', '');
+      step.restart();
+      return plasma.list.splice(0, 1000);
     }
   });
 
