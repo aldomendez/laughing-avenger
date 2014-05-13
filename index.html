@@ -18,7 +18,10 @@
  
     <div class="ui four steps">
       <div class="ui {{process.states[process.actualStep][0]}} step">
-        {{process.steps.0}} (-=<b> {{plasma.program}} </b>=-)
+        {{process.steps.0}}
+          {{#plasma.program}} 
+          (-=<b> {{plasma.program}} </b>=-)
+          {{/plasma.program}}
       </div>
       <div class="ui {{process.states[process.actualStep][1]}} step">
         {{process.steps.1}}

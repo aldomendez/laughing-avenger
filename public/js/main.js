@@ -19,6 +19,10 @@
       this.list = [];
     }
 
+    Plasma.prototype.get = function() {};
+
+    Plasma.prototype.set = function() {};
+
     return Plasma;
 
   })();
@@ -160,8 +164,10 @@
     }
 
     ProgressBar.prototype.start = function() {
-      this.program = app.get('plasma.program');
-      switch (this.program) {
+      var program;
+      clearInterval(this.tickerId);
+      program = app.get('plasma.program');
+      switch (program) {
         case 1:
           this.minutes = 15;
           break;
@@ -175,7 +181,7 @@
       this.final = new Date();
       this.final = new Date(this.final.setSeconds(this.final.getSeconds() + this.minutes * 60));
       this.tickCounter = 0;
-      return this.tickerId = setInterval(this.tick, 600);
+      return this.tickerId = setInterval(this.tick, 1600);
     };
 
     ProgressBar.prototype.tick = function() {
@@ -183,13 +189,17 @@
       this.tickCounter++;
       now = new Date();
       if (now > this.final) {
-        clearInterval(this.tickerId);
-        app.set('pBar.progress', '');
+        this.cancel();
         step.next();
       }
       this.percent = Math.floor(((now - this.inicio) / (this.final - this.inicio)) * 100);
       console.log(this.percent);
       return app.set('pBar.percent', this.percent);
+    };
+
+    ProgressBar.prototype.cancel = function() {
+      clearInterval(this.tickerId);
+      return app.set('pBar.percent', '');
     };
 
     return ProgressBar;
@@ -293,7 +303,8 @@
     'cancelOvenProgress': function(event) {
       app.set('plasma.program', '');
       step.restart();
-      return plasma.list.splice(0, 1000);
+      plasma.list.splice(0, 1000);
+      return progress.cancel();
     }
   });
 

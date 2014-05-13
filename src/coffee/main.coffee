@@ -4,6 +4,10 @@ class Material
 class Plasma
   constructor: () ->
     @list = []
+  get:()->
+
+  set:()->
+
 
 class Materiales
   constructor: () ->
@@ -127,8 +131,9 @@ class ProgressBar
     constructor: () ->
       @percent = 0
     start:()->
-      @program = app.get 'plasma.program'
-      switch @program
+      clearInterval @tickerId
+      program = app.get 'plasma.program'
+      switch program
         when 1 then @minutes = 15
         when 3 then @minutes = 2.5
         when 5 then @minutes = 15
@@ -136,17 +141,19 @@ class ProgressBar
       @final = new Date()
       @final = new Date @final.setSeconds @final.getSeconds() + @minutes*60
       @tickCounter = 0
-      @tickerId = setInterval @tick, 600
+      @tickerId = setInterval @tick, 1600
     tick:()=>
       @tickCounter++
       now = new Date()
-      if now > @final 
-        clearInterval @tickerId
-        app.set 'pBar.progress', ''
+      if now > @final
+        @cancel()
         step.next()
       @percent = Math.floor ((now - @inicio) / (@final - @inicio))*100
       console.log @percent
       app.set 'pBar.percent', @percent
+    cancel:()->
+      clearInterval @tickerId
+      app.set 'pBar.percent', ''
 
 
 
@@ -224,7 +231,7 @@ app.on
     app.set 'plasma.program',''
     step.restart()
     plasma.list.splice 0,1000
-    # stopProgressCounter()
+    progress.cancel()
 
 
 
