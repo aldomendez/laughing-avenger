@@ -4,9 +4,23 @@ class Material
 class Plasma
   constructor: () ->
     @list = []
+    @get()
+    # Al instanciar este elemento, se debe de cargar del servidor
+    # los elementos que actualmente esten cargados en alguna otra instancia
   get:()->
+    plasma = $.getJSON 'plasma.php'
+    .done (data)->
+      console.log data
+    .fail (error)->
+      console.log error.statusText
 
   set:()->
+    # Antes de ejecutarse, se debe de cargar la informacion de la base de datos
+    # para saber si ya hay alguna otra instancia ejecutandose en otra maquina,
+    # tambien debera de existir la siguiente informacion:
+    #   * Hora de inicio
+    #   * Hora de finalizacion
+    #   * Programa cargado
 
 
 class Materiales
@@ -233,7 +247,10 @@ app.on
     plasma.list.splice 0,1000
     progress.cancel()
 
+############################################
+# Cargar los datos de estado del server de manera que no se activen dos instancias del mismo servidor al mismo tiempo.
 
+############################################
 
 # app.observe 'plasma.program', (actual,old)->
   # console.log actual

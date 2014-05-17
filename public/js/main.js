@@ -17,9 +17,17 @@
   Plasma = (function() {
     function Plasma() {
       this.list = [];
+      this.get();
     }
 
-    Plasma.prototype.get = function() {};
+    Plasma.prototype.get = function() {
+      var plasma;
+      return plasma = $.getJSON('plasma.php').done(function(data) {
+        return console.log(data);
+      }).fail(function(error) {
+        return console.log(error.statusText);
+      });
+    };
 
     Plasma.prototype.set = function() {};
 
